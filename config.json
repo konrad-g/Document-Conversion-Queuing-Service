@@ -1,0 +1,8 @@
+{
+    "mongodb": {
+        "user": "",
+        "password": "",
+        "host": "localhost:27017",
+        "database": "queue_service_konrad_g"
+    }
+}

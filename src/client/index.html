@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Conversion Queuing Service</title>
+    <script src="/src/client/final/scripts.min.js"></script>
+    <link rel="stylesheet" href="/src/client/final/styles.min.css">
+    <link rel="icon" href="/src/client/images/app-icon.png">
+</head>
+<body ng-app="RTCM_app">
+<div ng-controller="MainCtrl" class="md-padding">
+    <md-card class="main-card">
+        <md-toolbar class="md-table-toolbar md-default">
+            <div class="md-toolbar-tools">
+                <h1>Conversions</h1>
+                <span class="btn-group btn-group-fill">
+                    <button type="button" class="btn btn-primary btn-right btn-space-left"
+                            ng-click="newHtmlConversion($event)">New HTML Conversion</button>
+                    <button type="button" class="btn btn-primary btn-right" ng-click="newPdfConversion($event)">New PDF Conversion</button>
+                </span>
+            </div>
+            <div class="author">Made by <a href="mailto:kgadzinowski@gmail.com">Konrad Gadzinowski</a></div>
+        </md-toolbar>
+
+        <md-table-container>
+            <table md-table md-row-select="false" multiple="false" ng-model="selected"
+                   md-progress="promise">
+                <thead md-head md-order="query.order">
+                <tr md-row class="row">
+                    <th class="col-md-4" md-column md-order-by="name"><span>Name</span></th>
+                    <th class="col-md-2" md-column md-order-by="createdDate"><span>Created at</span></th>
+                    <th class="col-md-2" md-column md-order-by="type"><span>Type</span></th>
+                    <th class="col-md-2" md-column md-order-by="status"><span>Status</span></th>
+                    <th class="col-md-2"><span></span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row md-select="file" md-on-select="logItem" md-auto-select="false" class="row"
+                    ng-repeat="file in files | filter: filter.search | orderBy: query.order
+                    | limitTo: query.limit : (query.page -1) * query.limit">
+                    <td class="col-md-4" md-cell>{{file.name}}</td>
+                    <td class="col-md-2" md-cell>{{file.createdDate | date : 'medium'}}</td>
+                    <td class="col-md-2" md-cell>
+                        <download-button ng-show="file.status == 'ready'" id="file._id" name="file.name"
+                                         type="file.type">
+                        </download-button>
+                        <span class="btn btn-primary" disabled ng-show="file.status != 'ready'">
+                            {{file.type.toUpperCase()}}
+                        </span>
+                    </td>
+                    <td class="col-md-2" md-cell>
+                        <div ng-show="file.status == 'queue'">
+                            <img src="/src/client/images/clock.svg" alt="In Queue" width="18px" height="18px">
+                            <span>In Queue</span>
+                        </div>
+                        <div ng-show="file.status == 'processing'">
+                            <img src="/src/client/images/processing.svg" alt="Processing" width="18px" height="18px">
+                            <span>Processing</span>
+                        </div>
+                        <div ng-show="file.status == 'ready'">
+                            <img src="/src/client/images/tick.svg" alt="Processed" width="18px" height="18px">
+                            <span>Processed</span>
+                        </div>
+                    </td>
+                    <td class="col-md-2" md-cell>
+                        <div class="btn btn-default" ng-click="deleteFile(file)">
+                            <img src="/src/client/images/remove.svg" alt="Remove" width="18px" height="18px">
+                            <span>Remove</span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+
+        <md-table-pagination md-limit="query.limit" md-limit-options="limitOptions" md-page="query.page"
+                             md-total="{{files.length}}" md-page-select="options.pageSelect"
+                             md-boundary-links="options.boundaryLinks"
+                             md-on-paginate="logPagination">
+        </md-table-pagination>
+    </md-card>
+</div>
+</body>
+</html>

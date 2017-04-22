@@ -1,0 +1,26 @@
+html, body {
+    text-align: center;
+}
+
+.main-card {
+    text-align: left;
+    max-width: 1000px;
+    display: inline-block;
+}
+
+.author {
+    font-size: 0.6em;
+    margin-left: 25px;
+}
+
+.btn-group-fill {
+    width: 100%;
+}
+
+.btn-group>.btn-right {
+    float: right;
+}
+
+.btn-group>.btn-space-left, .btn-group>.btn-space-left:first-child {
+    margin-left: 10px;
+}
